@@ -113,6 +113,9 @@ def index():
 
 @app.route("/admin/logs")
 def view_logs():
+    secret = request.args.get("key")
+    if secret != os.environ.get("ADMIN_KEY", "adminpass"):
+        return "<h3>접근이 제한되었습니다. ?key=비밀번호 형태로 접속해주세요.</h3>", 403
     logs = read_logs()
     return "<h2>로그 기록</h2><pre>{}</pre>".format("".join(logs))
 
