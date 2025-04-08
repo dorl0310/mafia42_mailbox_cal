@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 from math import ceil
 import os
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -78,6 +79,16 @@ def calculate_mailbox_upgrade(c, d, k, has_luxury, exchange_rate, initial_rubles
         "총 현질 비용 (₩)": total_cost
     }
 
+def log_submission(data):
+    with open("log.txt", "a", encoding="utf-8") as f:
+        f.write(f"[{datetime.now().isoformat()}] 입력값: {data}\n")
+
+def read_logs():
+    if os.path.exists("log.txt"):
+        with open("log.txt", "r", encoding="utf-8") as f:
+            return f.readlines()
+    return []
+
 @app.route("/", methods=["GET", "POST"])
 def index():
     result = None
@@ -90,9 +101,20 @@ def index():
         initial_rubles = int(request.form["initial_rubles"])
         initial_luna = int(request.form["initial_luna"])
 
-        result = calculate_mailbox_upgrade(c, d, k, has_luxury, exchange_rate, initial_rubles, initial_luna)
+        # 로그 저장
+        log_submission(dict(request.form))
 
-    return render_template("index.html", result=result)
+        result = calculate_mailbox_upgrade(c, d, k, has_luxury, exchange_rate, initial_rubles, initial_luna)
+        form_data = request.form
+    else:
+        form_data = {}
+
+    return render_template("index.html", result=result, form_data=form_data)
+
+@app.route("/admin/logs")
+def view_logs():
+    logs = read_logs()
+    return "<h2>로그 기록</h2><pre>{}</pre>".format("".join(logs))
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
