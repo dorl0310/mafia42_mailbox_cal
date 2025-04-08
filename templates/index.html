@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>우체통 확장 계산기</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background-color: #f5f7fa;
+      color: #333;
+      margin: 0;
+      padding: 40px;
+    }
+    .container {
+      max-width: 720px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #2d5be3;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input[type="number"], input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      margin-top: 25px;
+      width: 100%;
+      background-color: #2d5be3;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 30px;
+      background: #f0f4ff;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    ul {
+      padding-left: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>우체통 확장 계산기</h1>
+    <form method="POST">
+      <label>현재 우체통 크기</label>
+      <input type="number" name="current_size" required>
+
+      <label>목표 우체통 크기</label>
+      <input type="number" name="target_size" required>
+
+      <label>보유 헤르메스 개수</label>
+      <input type="number" name="hermes" required>
+
+      <label>루나 ↔ 루블 환율</label>
+      <input type="number" name="rate" required>
+
+      <label>보유 루블</label>
+      <input type="number" name="initial_rubles" required>
+
+      <label>보유 루나</label>
+      <input type="number" name="initial_luna" required>
+
+      <label><input type="checkbox" name="luxury"> 사치패 보유</label>
+
+      <button type="submit">계산하기</button>
+    </form>
+
+    {% if result %}
+    <div class="result">
+      <h3>계산 결과</h3>
+      <ul>
+        {% for key, value in result.items() %}
+          {% if key == "구매 상품 목록" %}
+            <li><strong>{{ key }}:</strong>
+              <ul>
+                {% for item in value %}
+                  <li>상품 {{ item[0] }} x{{ item[1] }} (₩{{ item[2] }})</li>
+                {% endfor %}
+              </ul>
+            </li>
+          {% else %}
+            <li><strong>{{ key }}:</strong> {{ value }}</li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+  </div>
+</body>
+</html>
