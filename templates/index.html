@@ -63,24 +63,24 @@
     <h1>우체통 확장 계산기</h1>
     <form method="POST">
       <label>현재 우체통 크기</label>
-      <input type="number" name="current_size" required>
+      <input type="number" name="current_size" required value="{{ form_data.get('current_size', '') }}">
 
       <label>목표 우체통 크기</label>
-      <input type="number" name="target_size" required>
+      <input type="number" name="target_size" required value="{{ form_data.get('target_size', '') }}">
 
       <label>보유 헤르메스 개수</label>
-      <input type="number" name="hermes" required>
+      <input type="number" name="hermes" required value="{{ form_data.get('hermes', '') }}">
 
       <label>루나 ↔ 루블 환율</label>
-      <input type="number" name="rate" required>
+      <input type="number" name="rate" required value="{{ form_data.get('rate', '') }}">
 
       <label>보유 루블</label>
-      <input type="number" name="initial_rubles" required>
+      <input type="number" name="initial_rubles" required value="{{ form_data.get('initial_rubles', '') }}">
 
       <label>보유 루나</label>
-      <input type="number" name="initial_luna" required>
+      <input type="number" name="initial_luna" required value="{{ form_data.get('initial_luna', '') }}">
 
-      <label><input type="checkbox" name="luxury"> 사치패 보유</label>
+      <label><input type="checkbox" name="luxury" {% if form_data.get('luxury') %}checked{% endif %}> 사치패 보유</label>
 
       <button type="submit">계산하기</button>
     </form>
